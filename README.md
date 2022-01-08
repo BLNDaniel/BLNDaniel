@@ -8,7 +8,6 @@
 - ⚡ Fun fact: I love to play computer games xD
 
 <br />
-
 ## Languages
 - Javascript
 

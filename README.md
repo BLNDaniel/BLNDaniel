@@ -10,11 +10,12 @@
 <br />
 
 ## Languages
-
 - Javascript
-- Lua
-- HTML
-- CSS
+
+## Working on
+- Discord Bots
+- Websites
+- FiveM Server
 
 ## Criminal Island [GERMAN]
 Discord: https://discord.gg/GEbDggZwh2

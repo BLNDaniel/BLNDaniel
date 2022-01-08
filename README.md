@@ -9,3 +9,10 @@
 
 <br />
 <br />
+
+## Languages
+
+- Javascript
+- Lua
+- HTML
+- CSS

@@ -18,13 +18,13 @@
 - FiveM Server
 
 ## Social Media
-Youtube: 
-Instagram:
-Twitter:
+- Youtube: 
+- Instagram:
+- Twitter:
 
 ## Contact me 
-Discord: 030Danny#0030
-Email: ###
+- Discord: 030Danny#0030
+- Email: ###
 
 ## Criminal Island [GERMAN]
-Discord: https://discord.gg/GEbDggZwh2
+- Discord: https://discord.gg/GEbDggZwh2

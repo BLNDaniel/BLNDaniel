@@ -8,6 +8,7 @@
 - ⚡ Fun fact: I love to play computer games xD
 
 <br />
+
 ## Languages
 - Javascript
 
@@ -15,6 +16,15 @@
 - Discord Bots
 - Websites
 - FiveM Server
+
+## Social Media
+Youtube: 
+Instagram:
+Twitter:
+
+## Contact me 
+Discord: 030Danny#0030
+Email: ###
 
 ## Criminal Island [GERMAN]
 Discord: https://discord.gg/GEbDggZwh2

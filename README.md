@@ -8,7 +8,6 @@
 - ⚡ Fun fact: I love to play computer games xD
 
 <br />
-<br />
 
 ## Languages
 
@@ -16,3 +15,6 @@
 - Lua
 - HTML
 - CSS
+
+## Criminal Island [GERMAN]
+Discord: https://discord.gg/GEbDggZwh2

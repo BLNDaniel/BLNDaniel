@@ -24,8 +24,5 @@
 - Twitter:
 
 ## Contact me 
-- Discord: 030Danny#0030
+- Discord: danny.gg
 - Email: ###
-
-## Criminal Island [GERMAN]
-- Discord: https://discord.gg/GEbDggZwh2

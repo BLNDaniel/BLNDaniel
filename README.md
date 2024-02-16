@@ -11,6 +11,7 @@
 
 ## Languages
 - Javascript
+- Lua
 
 ## Working on
 - Discord Bots

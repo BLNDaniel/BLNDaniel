@@ -2,9 +2,8 @@
 
 ## I'm a Developer, and Student!!
 
-- 🌱 I’m currently learning everything 🤣
-- 👯 I’m looking to collaborate with other content creators
-- 🥅 2022 Goals: Contribute more to Open Source projects
+- 🌱 I’m currently learning everything
+- 🥅 2024 Goals: Contribute more to Open Source projects
 - ⚡ Fun fact: I love to play computer games xD
 
 <br />

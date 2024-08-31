@@ -1,6 +1,6 @@
 ### Hi there, I'm Danny - aka [Daniel]👋 
 
-## I'm a Developer, and Student!!
+## I'm a Developer ##
 
 - 🌱 I’m currently learning everything
 - 🥅 2024 Goals: Contribute more to Open Source projects

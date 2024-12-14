@@ -10,6 +10,10 @@
 
 ## Languages
 - Javascript
+- C#
+- C++
+- HTML
+- PHP
 - Lua
 
 ## Working on

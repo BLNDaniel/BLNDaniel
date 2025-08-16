@@ -60,14 +60,14 @@ public class HeadSpawner {
                     String textureValue = lootResult.getTier().getHeadTexture();
                     profile.setProperty(new ProfileProperty("textures", textureValue));
                 } catch (Exception e) {
-                    plugin.getLogger().warning("Failed to apply custom texture: " + e.getMessage());
+                    plugin.getLogger().warning("Fehler beim Anwenden der benutzerdefinierten Textur: " + e.getMessage());
                 }
                 skull.setPlayerProfile(profile);
                 skull.update();
 
                 // 4. Register the head location
                 treasureChestManager.addTreasureChest(location, lootResult.getTier());
-                plugin.getLogger().info("Successfully spawned a treasure head at " + location);
+                plugin.getLogger().info("Erfolgreich einen Schatz-Kopf an Position " + location.toVector() + " gespawnt");
             }
         }.runTaskLater(plugin, 10L); // Delay of 10 ticks (0.5 seconds)
     }

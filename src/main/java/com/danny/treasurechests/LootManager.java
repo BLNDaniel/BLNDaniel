@@ -63,7 +63,7 @@ public class LootManager {
 
                 particleEffects.add(new ParticleEffect(type, count, speed));
             } catch (Exception e) {
-                plugin.getLogger().warning("Failed to parse a particle effect in config: " + e.getMessage());
+                plugin.getLogger().warning("Fehler beim Verarbeiten eines Partikeleffekts in der Konfiguration: " + e.getMessage());
             }
         }
 
@@ -72,13 +72,13 @@ public class LootManager {
 
 
     public void loadLootTables() {
-        plugin.getLogger().info("Loading loot tables...");
+        plugin.getLogger().info("Lade Beutetabellen...");
         lootTiers.clear();
         totalTierChance = 0.0;
 
         ConfigurationSection tiersSection = plugin.getConfig().getConfigurationSection("loot-tables.tiers");
         if (tiersSection == null) {
-            plugin.getLogger().warning("'loot-tables.tiers' section not found in config.yml! No loot will be available.");
+            plugin.getLogger().warning("Sektion 'loot-tables.tiers' nicht in config.yml gefunden! Es wird keine Beute verfügbar sein.");
             return;
         }
 
@@ -106,7 +106,7 @@ public class LootManager {
                     String materialName = (String) itemMap.get("material");
                     org.bukkit.Material material = org.bukkit.Material.getMaterial(materialName.toUpperCase());
                     if (material == null) {
-                        plugin.getLogger().warning("Invalid material '" + materialName + "' in tier '" + tierName + "'. Skipping item.");
+                        plugin.getLogger().warning("Ungültiges Material '" + materialName + "' in Stufe '" + tierName + "'. Gegenstand wird übersprungen.");
                         continue;
                     }
 
@@ -124,25 +124,25 @@ public class LootManager {
 
                     items.add(new LootItem(material, amount, chance));
                 } catch (Exception e) {
-                    plugin.getLogger().severe("Failed to parse an item in tier '" + tierName + "'. Error: " + e.getMessage());
+                    plugin.getLogger().severe("Fehler beim Verarbeiten eines Gegenstands in Stufe '" + tierName + "'. Fehler: " + e.getMessage());
                 }
             }
 
             if (items.isEmpty()) {
-                plugin.getLogger().warning("No valid items found for tier '" + tierName + "'. This tier will be skipped.");
+                plugin.getLogger().warning("Keine gültigen Gegenstände für Stufe '" + tierName + "'. Diese Stufe wird übersprungen.");
                 continue;
             }
 
             LootTier lootTier = new LootTier(tierName, displayName, headTexture, tierChance, soundInfo, items, spawnAnimation, despawnAnimation);
             lootTiers.put(tierName, lootTier);
             totalTierChance += tierChance;
-            plugin.getLogger().info("Loaded tier '" + tierName + "' with " + items.size() + " items.");
+            plugin.getLogger().info("Stufe '" + tierName + "' mit " + items.size() + " Gegenständen geladen.");
         }
 
         if (lootTiers.isEmpty()) {
-            plugin.getLogger().severe("No valid loot tiers were loaded! The plugin will not function correctly.");
+            plugin.getLogger().severe("Keine gültigen Beutestufen geladen! Das Plugin wird nicht korrekt funktionieren.");
         } else {
-            plugin.getLogger().info("Successfully loaded " + lootTiers.size() + " loot tiers.");
+            plugin.getLogger().info("Erfolgreich " + lootTiers.size() + " Beutestufen geladen.");
         }
     }
 
@@ -184,7 +184,6 @@ public class LootManager {
             return null;
         }
 
-        // This implementation is slightly biased if chances don't sum to 1.0, but it's common and simple.
         LootItem selected = null;
         while(selected == null) {
             for(LootItem item : tier.getItems()) {

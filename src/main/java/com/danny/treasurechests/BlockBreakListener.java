@@ -68,7 +68,7 @@ public class BlockBreakListener implements Listener {
                             player.playSound(player.getLocation(), soundName, 1.0f, 1.0f);
                         }
                     } catch (Exception e) {
-                        plugin.getLogger().warning("An error occurred while trying to play sound '" + soundName + "'. Is it a valid sound name?");
+                        plugin.getLogger().warning("Ein Fehler ist beim Abspielen des Sounds '" + soundName + "' aufgetreten. Ist der Sound-Name gültig?");
                     }
                 });
             }

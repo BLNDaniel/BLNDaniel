@@ -23,7 +23,7 @@ public class AnimationManager {
             try {
                 world.playSound(location, Sound.valueOf(sound.getName().toUpperCase()), sound.getVolume(), sound.getPitch());
             } catch (IllegalArgumentException e) {
-                plugin.getLogger().warning("Invalid sound name in config: " + sound.getName());
+                plugin.getLogger().warning("Ungültiger Sound-Name in der Konfiguration: " + sound.getName());
             }
         }
 

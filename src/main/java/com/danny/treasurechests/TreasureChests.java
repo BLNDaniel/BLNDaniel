@@ -26,12 +26,12 @@ public class TreasureChests extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new HeadInteractionListener(this, treasureChestManager), this);
         getServer().getPluginManager().registerEvents(new ChestCloseListener(this, treasureChestManager), this);
 
-        getLogger().info("TreasureChests has been enabled!");
+        getLogger().info("TreasureChests wurde aktiviert!");
     }
 
     @Override
     public void onDisable() {
-        getLogger().info("TreasureChests has been disabled!");
+        getLogger().info("TreasureChests wurde deaktiviert!");
     }
 
     public HeadSpawner getHeadSpawner() {

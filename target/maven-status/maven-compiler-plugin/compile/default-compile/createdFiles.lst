@@ -1,5 +1,6 @@
 com/danny/treasurechests/BlockBreakListener.class
 com/danny/treasurechests/LootItem.class
+com/danny/treasurechests/TreasureChestInventoryHolder.class
 com/danny/treasurechests/LootTier.class
 com/danny/treasurechests/TreasureChestManager.class
 com/danny/treasurechests/TreasureChests.class

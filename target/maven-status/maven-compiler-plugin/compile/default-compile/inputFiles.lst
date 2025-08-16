@@ -5,4 +5,5 @@
 /app/src/main/java/com/danny/treasurechests/TreasureChests.java
 /app/src/main/java/com/danny/treasurechests/LootTier.java
 /app/src/main/java/com/danny/treasurechests/LootManager.java
+/app/src/main/java/com/danny/treasurechests/TreasureChestInventoryHolder.java
 /app/src/main/java/com/danny/treasurechests/BlockBreakListener.java

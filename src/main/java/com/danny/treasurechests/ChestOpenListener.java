@@ -16,21 +16,22 @@ public class ChestOpenListener implements Listener {
 
     @EventHandler
     public void onInventoryClose(org.bukkit.event.inventory.InventoryCloseEvent event) {
-        if (!(event.getPlayer() instanceof org.bukkit.entity.Player)) return;
-        org.bukkit.entity.Player player = (org.bukkit.entity.Player) event.getPlayer();
+        org.bukkit.inventory.InventoryHolder holder = event.getInventory().getHolder();
 
-        // Check if this player was viewing one of our treasure chests
-        org.bukkit.Location location = treasureChestManager.getViewingLocation(player);
-        if (location != null) {
-            // This player was viewing a treasure chest. Now we need to clean up.
-            // First, always remove them from the viewing map
-            treasureChestManager.removePlayerViewing(player);
+        // Check if the closed inventory was one of our custom treasure chests
+        if (holder instanceof TreasureChestInventoryHolder) {
+            TreasureChestInventoryHolder customHolder = (TreasureChestInventoryHolder) holder;
+            org.bukkit.Location location = customHolder.getChestLocation();
+            org.bukkit.inventory.ItemStack[] finalContents = event.getInventory().getContents();
 
-            // Next, check if the chest is now empty
+            // Get the real chest block and update its contents
             if (location.getBlock().getType() == org.bukkit.Material.CHEST) {
                 org.bukkit.block.Chest chest = (org.bukkit.block.Chest) location.getBlock().getState();
+                chest.getInventory().setContents(finalContents);
+
+                // Check if the chest is now empty and unregister it if so
                 boolean isEmpty = true;
-                for (org.bukkit.inventory.ItemStack item : chest.getInventory().getContents()) {
+                for (org.bukkit.inventory.ItemStack item : finalContents) {
                     if (item != null) {
                         isEmpty = false;
                         break;
@@ -38,7 +39,6 @@ public class ChestOpenListener implements Listener {
                 }
 
                 if (isEmpty) {
-                    // The chest is empty, so we can unregister it.
                     treasureChestManager.removeTreasureChest(location);
                     plugin.getLogger().info("Treasure chest at " + location + " is empty and has been unregistered.");
                 }
@@ -58,15 +58,13 @@ public class ChestOpenListener implements Listener {
             LootTier tier = treasureChestManager.getTierAt(location);
             org.bukkit.block.Chest chest = (org.bukkit.block.Chest) location.getBlock().getState();
 
-            // Create a new inventory with the custom title
+            // Create a new inventory with the custom title and our custom holder
             String title = org.bukkit.ChatColor.translateAlternateColorCodes('&', tier.getDisplayName());
-            org.bukkit.inventory.Inventory customInventory = org.bukkit.Bukkit.createInventory(null, chest.getInventory().getSize(), title);
+            TreasureChestInventoryHolder holder = new TreasureChestInventoryHolder(location);
+            org.bukkit.inventory.Inventory customInventory = org.bukkit.Bukkit.createInventory(holder, chest.getInventory().getSize(), title);
 
             // Copy contents from the real chest to our custom inventory
             customInventory.setContents(chest.getInventory().getContents());
-
-            // Track that the player is viewing this chest
-            treasureChestManager.setPlayerViewing(event.getPlayer(), location);
 
             event.getPlayer().openInventory(customInventory);
         }

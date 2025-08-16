@@ -6,7 +6,7 @@ public class TreasureChests extends JavaPlugin {
 
     private LootManager lootManager;
     private TreasureChestManager treasureChestManager;
-    private HeadSpawner headSpawner;
+    private DisplayManager displayManager;
 
     @Override
     public void onEnable() {
@@ -16,15 +16,15 @@ public class TreasureChests extends JavaPlugin {
         // Initialize managers and handlers
         this.lootManager = new LootManager(this);
         this.treasureChestManager = new TreasureChestManager();
-        this.headSpawner = new HeadSpawner(this, treasureChestManager);
+        this.displayManager = new DisplayManager(this, treasureChestManager);
 
         // Load loot tables from config
         this.lootManager.loadLootTables();
 
         // Register event listeners
         getServer().getPluginManager().registerEvents(new BlockBreakListener(this, lootManager), this);
-        getServer().getPluginManager().registerEvents(new HeadInteractionListener(this, treasureChestManager), this);
-        getServer().getPluginManager().registerEvents(new ChestCloseListener(this, treasureChestManager), this);
+        getServer().getPluginManager().registerEvents(new DisplayInteractListener(treasureChestManager), this);
+        getServer().getPluginManager().registerEvents(new BarrelCloseListener(displayManager, treasureChestManager), this);
 
         getLogger().info("TreasureChests wurde aktiviert!");
     }
@@ -34,7 +34,7 @@ public class TreasureChests extends JavaPlugin {
         getLogger().info("TreasureChests wurde deaktiviert!");
     }
 
-    public HeadSpawner getHeadSpawner() {
-        return headSpawner;
+    public DisplayManager getDisplayManager() {
+        return displayManager;
     }
 }

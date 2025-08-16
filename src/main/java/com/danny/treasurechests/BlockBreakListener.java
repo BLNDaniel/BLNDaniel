@@ -43,13 +43,11 @@ public class BlockBreakListener implements Listener {
             if (lootResult != null && !lootResult.getItems().isEmpty()) {
                 Bukkit.getScheduler().runTask(plugin, () -> {
                     // Spawn the treasure chest and custom model
-                    plugin.getHeadSpawner().spawnHead(location, lootResult);
+                    plugin.getDisplayManager().spawnTreasure(location, lootResult);
 
                     // Send feedback to the server
                     String message = plugin.getConfig().getString("broadcast-message", "&e%player% found a %tier% treasure chest!");
-                    String tierName = lootResult.getTier().getName();
-                    // Capitalize the first letter of the tier name for better display
-                    tierName = tierName.substring(0, 1).toUpperCase() + tierName.substring(1);
+                    String tierName = lootResult.getTier().getDisplayName();
 
                     message = message.replace("%player%", player.getName()).replace("%tier%", tierName);
                     org.bukkit.Bukkit.broadcastMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', message));

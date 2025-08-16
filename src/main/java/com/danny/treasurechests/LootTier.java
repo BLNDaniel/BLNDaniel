@@ -1,5 +1,7 @@
 package com.danny.treasurechests;
 
+import com.danny.treasurechests.Animation.AnimationInfo;
+
 import java.util.List;
 
 public class LootTier {
@@ -10,10 +12,10 @@ public class LootTier {
     private final double chance;
     private final SoundInfo soundInfo;
     private final List<LootItem> items;
-    private final Animation.AnimationInfo spawnAnimation;
-    private final Animation.AnimationInfo despawnAnimation;
+    private final AnimationInfo spawnAnimation;
+    private final AnimationInfo despawnAnimation;
 
-    public LootTier(String name, String displayName, String headTexture, double chance, SoundInfo soundInfo, List<LootItem> items, Animation.AnimationInfo spawnAnimation, Animation.AnimationInfo despawnAnimation) {
+    public LootTier(String name, String displayName, String headTexture, double chance, SoundInfo soundInfo, List<LootItem> items, AnimationInfo spawnAnimation, AnimationInfo despawnAnimation) {
         this.name = name;
         this.displayName = displayName;
         this.headTexture = headTexture;
@@ -48,11 +50,11 @@ public class LootTier {
         return items;
     }
 
-    public Animation.AnimationInfo getSpawnAnimation() {
+    public AnimationInfo getSpawnAnimation() {
         return spawnAnimation;
     }
 
-    public Animation.AnimationInfo getDespawnAnimation() {
+    public AnimationInfo getDespawnAnimation() {
         return despawnAnimation;
     }
 }

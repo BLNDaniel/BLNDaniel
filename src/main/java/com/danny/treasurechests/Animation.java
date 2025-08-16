@@ -9,14 +9,18 @@ public class Animation {
     public static class AnimationInfo {
         private final SoundEffect sound;
         private final List<ParticleEffect> particles;
+        private final ScaleEffect scale;
 
-        public AnimationInfo(SoundEffect sound, List<ParticleEffect> particles) {
+
+        public AnimationInfo(SoundEffect sound, List<ParticleEffect> particles, ScaleEffect scale) {
             this.sound = sound;
             this.particles = particles;
+            this.scale = scale;
         }
 
         public SoundEffect getSound() { return sound; }
         public List<ParticleEffect> getParticles() { return particles; }
+        public ScaleEffect getScale() { return scale; }
     }
 
     public static class SoundEffect {
@@ -49,5 +53,21 @@ public class Animation {
         public Particle getType() { return type; }
         public int getCount() { return count; }
         public double getSpeed() { return speed; }
+    }
+
+    public static class ScaleEffect {
+        private final double from;
+        private final double to;
+        private final int duration;
+
+        public ScaleEffect(double from, double to, int duration) {
+            this.from = from;
+            this.to = to;
+            this.duration = duration;
+        }
+
+        public double getFrom() { return from; }
+        public double getTo() { return to; }
+        public int getDuration() { return duration; }
     }
 }

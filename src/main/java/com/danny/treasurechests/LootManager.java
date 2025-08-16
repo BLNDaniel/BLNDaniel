@@ -2,6 +2,7 @@ package com.danny.treasurechests;
 
 import com.danny.treasurechests.Animation.AnimationInfo;
 import com.danny.treasurechests.Animation.ParticleEffect;
+import com.danny.treasurechests.Animation.ScaleEffect;
 import com.danny.treasurechests.Animation.SoundEffect;
 import org.bukkit.Particle;
 import org.bukkit.configuration.ConfigurationSection;
@@ -25,7 +26,7 @@ public class LootManager {
 
     private AnimationInfo parseAnimationInfo(ConfigurationSection section) {
         if (section == null) {
-            return new AnimationInfo(null, Collections.emptyList());
+            return new AnimationInfo(null, Collections.emptyList(), null);
         }
 
         // Parse Sound
@@ -49,25 +50,26 @@ public class LootManager {
             try {
                 String typeName = (String) particleMap.get("type");
                 Particle type = Particle.valueOf(typeName.toUpperCase());
-                int count = 10;
-                Object countObj = particleMap.get("count");
-                if (countObj instanceof Integer) {
-                    count = (Integer) countObj;
-                }
-
-                double speed = 0.1;
-                Object speedObj = particleMap.get("speed");
-                if (speedObj instanceof Number) {
-                    speed = ((Number) speedObj).doubleValue();
-                }
-
+                int count = particleMap.get("count") != null ? (int) particleMap.get("count") : 10;
+                double speed = particleMap.get("speed") != null ? (double) particleMap.get("speed") : 0.1;
                 particleEffects.add(new ParticleEffect(type, count, speed));
             } catch (Exception e) {
                 plugin.getLogger().warning("Fehler beim Verarbeiten eines Partikeleffekts in der Konfiguration: " + e.getMessage());
             }
         }
 
-        return new AnimationInfo(soundEffect, particleEffects);
+        // Parse Scale
+        ScaleEffect scaleEffect = null;
+        ConfigurationSection scaleSection = section.getConfigurationSection("scale");
+        if (scaleSection != null) {
+            scaleEffect = new ScaleEffect(
+                scaleSection.getDouble("from", 1.0),
+                scaleSection.getDouble("to", 1.0),
+                scaleSection.getInt("duration", 20)
+            );
+        }
+
+        return new AnimationInfo(soundEffect, particleEffects, scaleEffect);
     }
 
 

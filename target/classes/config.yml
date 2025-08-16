@@ -1,8 +1,8 @@
 # TreasureChests Configuration
 
 # The chance (out of 1.0) that a treasure chest will drop when a valid block is broken.
-# For example, 0.005 is a 0.5% chance.
-drop-chance: 0.005
+# For example, 0.05 is a 5% chance.
+drop-chance: 0.05
 
 # The message broadcast to the server when a treasure chest is found.
 # Use %player% for the player's name and %tier% for the chest tier.
@@ -77,7 +77,7 @@ loot-tables:
       display-name: "&6Legendäre Kiste"
       chance: 0.08
       sound:
-        name: "ENTITY_WITHER_SPAWN"
+        name: "ENTITY_PLAYER_LEVELUP"
         broadcast: true
       items:
         - material: "NETHERITE_INGOT"
@@ -93,7 +93,7 @@ loot-tables:
       display-name: "&dMythische Kiste"
       chance: 0.02
       sound:
-        name: "ENTITY_ENDER_DRAGON_DEATH"
+        name: "ENTITY_PLAYER_LEVELUP"
         broadcast: true
       items:
         - material: "NETHER_STAR"

@@ -9,16 +9,17 @@ public class BlockBreakListener implements Listener {
 
     private final TreasureChests plugin;
     private final LootManager lootManager;
-    private final ChestSpawner chestSpawner;
 
-    public BlockBreakListener(TreasureChests plugin, LootManager lootManager, ChestSpawner chestSpawner) {
+    public BlockBreakListener(TreasureChests plugin, LootManager lootManager) {
         this.plugin = plugin;
         this.lootManager = lootManager;
-        this.chestSpawner = chestSpawner;
     }
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
+        final org.bukkit.entity.Player player = event.getPlayer();
+        final org.bukkit.Location location = event.getBlock().getLocation();
+
         // Check if the block is in the allowed list
         java.util.List<String> allowedBlocks = plugin.getConfig().getStringList("allowed-blocks");
         if (!allowedBlocks.contains(event.getBlock().getType().name())) {
@@ -31,9 +32,6 @@ public class BlockBreakListener implements Listener {
             return;
         }
 
-        final org.bukkit.entity.Player player = event.getPlayer();
-        final org.bukkit.Location location = event.getBlock().getLocation();
-
         // Prevent the block from dropping its normal items
         event.setDropItems(false);
 
@@ -45,7 +43,7 @@ public class BlockBreakListener implements Listener {
             if (lootResult != null && !lootResult.getItems().isEmpty()) {
                 Bukkit.getScheduler().runTask(plugin, () -> {
                     // Spawn the treasure chest and custom model
-                    chestSpawner.spawnTreasure(location, lootResult);
+                    plugin.getHeadSpawner().spawnHead(location, lootResult);
 
                     // Send feedback to the server
                     String message = plugin.getConfig().getString("broadcast-message", "&e%player% found a %tier% treasure chest!");

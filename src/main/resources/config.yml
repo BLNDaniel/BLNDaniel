@@ -1,15 +1,14 @@
 # TreasureChests Configuration
 
 # The chance (out of 1.0) that a treasure chest will drop when a valid block is broken.
-# For example, 0.005 is a 0.5% chance.
-drop-chance: 0.005
+# For example, 0.05 is a 5% chance.
+drop-chance: 0.05
 
 # The message broadcast to the server when a treasure chest is found.
 # Use %player% for the player's name and %tier% for the chest tier.
 broadcast-message: "&6&lSCHATZFUND! &e%player% &7hat eine &e%tier% &7Schatztruhe gefunden!"
 
 # A list of blocks that can drop a treasure chest when broken.
-# A list of valid materials can be found here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
 allowed-blocks:
   - "STONE"
   - "DEEPSLATE"
@@ -20,13 +19,13 @@ allowed-blocks:
 # loot-tables defines the loot found in treasure chests.
 loot-tables:
   # 'rolls' determines how many times the plugin tries to add an item to the chest.
-  # This can be a fixed number (e.g., 5) or a range (e.g., "3-6").
   rolls: "3-5"
 
   # Tiers define the different types of treasure chests that can be found.
   tiers:
     common:
       display-name: "&aGewöhnliche Kiste"
+      head-texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDU5MmVkNmQwNTlhZTQ5Yzk4ODAzYjIyOWUzOTJmNDQwMmEyNjdjODNiYmY3ODIzOWI0ZmVmNjRlYmExMzEzYiJ9fX0="
       chance: 0.50
       sound:
         name: "ENTITY_PLAYER_LEVELUP"
@@ -43,6 +42,7 @@ loot-tables:
           chance: 0.9
     rare:
       display-name: "&9Seltene Kiste"
+      head-texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDU5MmVkNmQwNTlhZTQ5Yzk4ODAzYjIyOWUzOTJmNDQwMmEyNjdjODNiYmY3ODIzOWI0ZmVmNjRlYmExMzEzYiJ9fX0="
       chance: 0.25
       sound:
         name: "ENTITY_PLAYER_LEVELUP"
@@ -59,6 +59,7 @@ loot-tables:
           chance: 0.4
     epic:
       display-name: "&5Epische Kiste"
+      head-texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDU5MmVkNmQwNTlhZTQ5Yzk4ODAzYjIyOWUzOTJmNDQwMmEyNjdjODNiYmY3ODIzOWI0ZmVmNjRlYmExMzEzYiJ9fX0="
       chance: 0.15
       sound:
         name: "ENTITY_PLAYER_LEVELUP"
@@ -75,9 +76,10 @@ loot-tables:
           chance: 0.8
     legendary:
       display-name: "&6Legendäre Kiste"
+      head-texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDU5MmVkNmQwNTlhZTQ5Yzk4ODAzYjIyOWUzOTJmNDQwMmEyNjdjODNiYmY3ODIzOWI0ZmVmNjRlYmExMzEzYiJ9fX0="
       chance: 0.08
       sound:
-        name: "ENTITY_WITHER_SPAWN"
+        name: "ENTITY_PLAYER_LEVELUP"
         broadcast: true
       items:
         - material: "NETHERITE_INGOT"
@@ -91,9 +93,10 @@ loot-tables:
           chance: 0.05
     mythical:
       display-name: "&dMythische Kiste"
+      head-texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDU5MmVkNmQwNTlhZTQ5Yzk4ODAzYjIyOWUzOTJmNDQwMmEyNjdjODNiYmY3ODIzOWI0ZmVmNjRlYmExMzEzYiJ9fX0="
       chance: 0.02
       sound:
-        name: "ENTITY_ENDER_DRAGON_DEATH"
+        name: "ENTITY_PLAYER_LEVELUP"
         broadcast: true
       items:
         - material: "NETHER_STAR"

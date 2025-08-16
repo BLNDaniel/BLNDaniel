@@ -6,13 +6,15 @@ public class LootTier {
 
     private final String name;
     private final String displayName;
+    private final String headTexture;
     private final double chance;
     private final SoundInfo soundInfo;
     private final List<LootItem> items;
 
-    public LootTier(String name, String displayName, double chance, SoundInfo soundInfo, List<LootItem> items) {
+    public LootTier(String name, String displayName, String headTexture, double chance, SoundInfo soundInfo, List<LootItem> items) {
         this.name = name;
         this.displayName = displayName;
+        this.headTexture = headTexture;
         this.chance = chance;
         this.soundInfo = soundInfo;
         this.items = items;
@@ -24,6 +26,10 @@ public class LootTier {
 
     public String getDisplayName() {
         return displayName;
+    }
+
+    public String getHeadTexture() {
+        return headTexture;
     }
 
     public double getChance() {

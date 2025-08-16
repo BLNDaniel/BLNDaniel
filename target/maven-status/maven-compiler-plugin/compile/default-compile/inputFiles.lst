@@ -1,10 +1,12 @@
 /app/src/main/java/com/danny/treasurechests/LootItem.java
-/app/src/main/java/com/danny/treasurechests/ChestOpenListener.java
 /app/src/main/java/com/danny/treasurechests/TreasureChestManager.java
-/app/src/main/java/com/danny/treasurechests/ChestSpawner.java
+/app/src/main/java/com/danny/treasurechests/ChestCloseListener.java
 /app/src/main/java/com/danny/treasurechests/SoundInfo.java
+/app/src/main/java/com/danny/treasurechests/AnimationManager.java
 /app/src/main/java/com/danny/treasurechests/TreasureChests.java
 /app/src/main/java/com/danny/treasurechests/LootTier.java
+/app/src/main/java/com/danny/treasurechests/Animation.java
+/app/src/main/java/com/danny/treasurechests/HeadInteractionListener.java
 /app/src/main/java/com/danny/treasurechests/LootManager.java
-/app/src/main/java/com/danny/treasurechests/TreasureChestInventoryHolder.java
 /app/src/main/java/com/danny/treasurechests/BlockBreakListener.java
+/app/src/main/java/com/danny/treasurechests/HeadSpawner.java

@@ -5,7 +5,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class TreasureChests extends JavaPlugin {
 
     private LootManager lootManager;
-    private ChestSpawner chestSpawner;
     private TreasureChestManager treasureChestManager;
     private HeadSpawner headSpawner;
 
@@ -24,7 +23,8 @@ public class TreasureChests extends JavaPlugin {
 
         // Register event listeners
         getServer().getPluginManager().registerEvents(new BlockBreakListener(this, lootManager), this);
-        // We will add the new HeadInteractionListener later.
+        getServer().getPluginManager().registerEvents(new HeadInteractionListener(this, treasureChestManager), this);
+        getServer().getPluginManager().registerEvents(new ChestCloseListener(this, treasureChestManager), this);
 
         getLogger().info("TreasureChests has been enabled!");
     }
@@ -32,5 +32,9 @@ public class TreasureChests extends JavaPlugin {
     @Override
     public void onDisable() {
         getLogger().info("TreasureChests has been disabled!");
+    }
+
+    public HeadSpawner getHeadSpawner() {
+        return headSpawner;
     }
 }

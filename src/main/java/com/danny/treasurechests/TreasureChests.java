@@ -6,8 +6,7 @@ public class TreasureChests extends JavaPlugin {
 
     private LootManager lootManager;
     private ChestSpawner chestSpawner;
-    private TiersGui tiersGui;
-    private TierEditorGui tierEditorGui;
+    private TreasureChestManager treasureChestManager;
 
     @Override
     public void onEnable() {
@@ -16,21 +15,15 @@ public class TreasureChests extends JavaPlugin {
 
         // Initialize managers and handlers
         this.lootManager = new LootManager(this);
-        this.chestSpawner = new ChestSpawner(this);
-        this.tiersGui = new TiersGui(this);
-        this.tierEditorGui = new TierEditorGui(this);
+        this.treasureChestManager = new TreasureChestManager();
+        this.chestSpawner = new ChestSpawner(this, treasureChestManager);
 
         // Load loot tables from config
         this.lootManager.loadLootTables();
 
-        // Register the event listener
+        // Register event listeners
         getServer().getPluginManager().registerEvents(new BlockBreakListener(this, lootManager, chestSpawner), this);
-
-        // Register the command executor
-        getCommand("yarrack").setExecutor(new YarrackCommand(this, tiersGui));
-
-        // Register the GUI Manager
-        getServer().getPluginManager().registerEvents(new GuiManager(this), this);
+        getServer().getPluginManager().registerEvents(new ChestOpenListener(this, treasureChestManager), this);
 
         getLogger().info("TreasureChests has been enabled!");
     }
@@ -38,13 +31,5 @@ public class TreasureChests extends JavaPlugin {
     @Override
     public void onDisable() {
         getLogger().info("TreasureChests has been disabled!");
-    }
-
-    public LootManager getLootManager() {
-        return lootManager;
-    }
-
-    public TierEditorGui getTierEditorGui() {
-        return tierEditorGui;
     }
 }

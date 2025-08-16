@@ -47,11 +47,16 @@ public class BlockBreakListener implements Listener {
                     // Spawn the treasure chest and custom model
                     chestSpawner.spawnTreasure(location, lootResult);
 
-                    // Send feedback to the player
-                    String message = plugin.getConfig().getString("message", "&aYou found a treasure!");
-                    message = message.replace("%player%", player.getName());
-                    player.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', message));
+                    // Send feedback to the server
+                    String message = plugin.getConfig().getString("broadcast-message", "&e%player% found a %tier% treasure chest!");
+                    String tierName = lootResult.getTier().getName();
+                    // Capitalize the first letter of the tier name for better display
+                    tierName = tierName.substring(0, 1).toUpperCase() + tierName.substring(1);
 
+                    message = message.replace("%player%", player.getName()).replace("%tier%", tierName);
+                    org.bukkit.Bukkit.broadcastMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', message));
+
+                    // Play sound for the player who found it
                     try {
                         String soundName = plugin.getConfig().getString("sound", "ENTITY_PLAYER_LEVELUP");
                         org.bukkit.Sound sound = org.bukkit.Sound.valueOf(soundName.toUpperCase());

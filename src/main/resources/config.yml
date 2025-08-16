@@ -4,9 +4,9 @@
 # For example, 0.005 is a 0.5% chance.
 drop-chance: 0.005
 
-# The message sent to the player when they find a treasure chest.
-# Use %player% as a placeholder for the player's name.
-message: "&6&lTreasure Found! &eYou broke a block and discovered a hidden chest!"
+# The message broadcast to the server when a treasure chest is found.
+# Use %player% for the player's name and %tier% for the chest tier.
+broadcast-message: "&6&lSCHATZFUND! &e%player% &7hat eine &e%tier% &7Schatztruhe gefunden!"
 
 # The sound played to the player when they find a treasure chest.
 # A list of valid sounds can be found here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
@@ -30,6 +30,7 @@ loot-tables:
   # Tiers define the different types of treasure chests that can be found.
   tiers:
     common:
+      display-name: "&aGewöhnliche Kiste"
       chance: 0.50
       items:
         - material: "IRON_INGOT"
@@ -42,6 +43,7 @@ loot-tables:
           amount: "4-8"
           chance: 0.9
     rare:
+      display-name: "&9Seltene Kiste"
       chance: 0.25
       items:
         - material: "GOLDEN_APPLE"
@@ -54,6 +56,7 @@ loot-tables:
           amount: 1
           chance: 0.4
     epic:
+      display-name: "&5Epische Kiste"
       chance: 0.15
       items:
         - material: "DIAMOND_SWORD"
@@ -66,6 +69,7 @@ loot-tables:
           amount: "8-16"
           chance: 0.8
     legendary:
+      display-name: "&6Legendäre Kiste"
       chance: 0.08
       items:
         - material: "NETHERITE_INGOT"
@@ -78,6 +82,7 @@ loot-tables:
           amount: 1
           chance: 0.05
     mythical:
+      display-name: "&dMythische Kiste"
       chance: 0.02
       items:
         - material: "NETHER_STAR"

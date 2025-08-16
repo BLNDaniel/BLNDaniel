@@ -34,6 +34,7 @@ public class LootManager {
             if (tierSection == null) continue;
 
             double tierChance = tierSection.getDouble("chance");
+            String displayName = tierSection.getString("display-name", tierName);
 
             List<LootItem> items = new ArrayList<>();
             List<Map<?, ?>> itemMaps = tierSection.getMapList("items");
@@ -70,7 +71,7 @@ public class LootManager {
                 continue;
             }
 
-            LootTier lootTier = new LootTier(tierName, tierChance, items);
+            LootTier lootTier = new LootTier(tierName, displayName, tierChance, items);
             lootTiers.put(tierName, lootTier);
             totalTierChance += tierChance;
             plugin.getLogger().info("Loaded tier '" + tierName + "' with " + items.size() + " items.");
@@ -155,36 +156,6 @@ public class LootManager {
         } catch (NumberFormatException e) {
             return 1;
         }
-    }
-
-    public Map<String, LootTier> getLootTiers() {
-        return lootTiers;
-    }
-
-    public void saveLootTables() {
-        plugin.getLogger().info("Saving loot tables to config.yml...");
-        // We are clearing the section first to ensure no old data remains
-        plugin.getConfig().set("loot-tables.tiers", null);
-
-        for (LootTier tier : lootTiers.values()) {
-            String path = "loot-tables.tiers." + tier.getName().toLowerCase();
-            plugin.getConfig().set(path + ".chance", tier.getChance());
-
-            List<Map<String, Object>> itemMaps = new ArrayList<>();
-            for (LootItem item : tier.getItems()) {
-                Map<String, Object> itemMap = new java.util.LinkedHashMap<>();
-                itemMap.put("material", item.getMaterial().name());
-                itemMap.put("amount", item.getAmount());
-                itemMap.put("chance", item.getChance());
-                itemMaps.add(itemMap);
-            }
-            plugin.getConfig().set(path + ".items", itemMaps);
-        }
-
-        plugin.saveConfig();
-        // Reload the tables from the file to ensure consistency
-        loadLootTables();
-        plugin.getLogger().info("Loot tables saved successfully.");
     }
 
     // A simple inner class to hold the result of a loot calculation.

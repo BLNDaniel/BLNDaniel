@@ -1,9 +1,7 @@
 /app/src/main/java/com/danny/treasurechests/LootItem.java
-/app/src/main/java/com/danny/treasurechests/YarrackCommand.java
-/app/src/main/java/com/danny/treasurechests/GuiManager.java
-/app/src/main/java/com/danny/treasurechests/TiersGui.java
+/app/src/main/java/com/danny/treasurechests/ChestOpenListener.java
+/app/src/main/java/com/danny/treasurechests/TreasureChestManager.java
 /app/src/main/java/com/danny/treasurechests/ChestSpawner.java
-/app/src/main/java/com/danny/treasurechests/TierEditorGui.java
 /app/src/main/java/com/danny/treasurechests/TreasureChests.java
 /app/src/main/java/com/danny/treasurechests/LootTier.java
 /app/src/main/java/com/danny/treasurechests/LootManager.java

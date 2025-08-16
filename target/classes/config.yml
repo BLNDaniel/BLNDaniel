@@ -8,10 +8,6 @@ drop-chance: 0.005
 # Use %player% for the player's name and %tier% for the chest tier.
 broadcast-message: "&6&lSCHATZFUND! &e%player% &7hat eine &e%tier% &7Schatztruhe gefunden!"
 
-# The sound played to the player when they find a treasure chest.
-# A list of valid sounds can be found here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
-sound: "ENTITY_PLAYER_LEVELUP"
-
 # A list of blocks that can drop a treasure chest when broken.
 # A list of valid materials can be found here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
 allowed-blocks:
@@ -32,6 +28,9 @@ loot-tables:
     common:
       display-name: "&aGewöhnliche Kiste"
       chance: 0.50
+      sound:
+        name: "ENTITY_PLAYER_LEVELUP"
+        broadcast: false
       items:
         - material: "IRON_INGOT"
           amount: "5-10"
@@ -45,6 +44,9 @@ loot-tables:
     rare:
       display-name: "&9Seltene Kiste"
       chance: 0.25
+      sound:
+        name: "ENTITY_PLAYER_LEVELUP"
+        broadcast: false
       items:
         - material: "GOLDEN_APPLE"
           amount: 1
@@ -58,6 +60,9 @@ loot-tables:
     epic:
       display-name: "&5Epische Kiste"
       chance: 0.15
+      sound:
+        name: "ENTITY_PLAYER_LEVELUP"
+        broadcast: true
       items:
         - material: "DIAMOND_SWORD"
           amount: 1
@@ -71,6 +76,9 @@ loot-tables:
     legendary:
       display-name: "&6Legendäre Kiste"
       chance: 0.08
+      sound:
+        name: "ENTITY_WITHER_SPAWN"
+        broadcast: true
       items:
         - material: "NETHERITE_INGOT"
           amount: "1-2"
@@ -84,6 +92,9 @@ loot-tables:
     mythical:
       display-name: "&dMythische Kiste"
       chance: 0.02
+      sound:
+        name: "ENTITY_ENDER_DRAGON_DEATH"
+        broadcast: true
       items:
         - material: "NETHER_STAR"
           amount: 1

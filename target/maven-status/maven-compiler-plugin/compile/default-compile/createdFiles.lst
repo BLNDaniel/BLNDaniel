@@ -1,10 +1,11 @@
-com/danny/treasurechests/BlockBreakListener.class
 com/danny/treasurechests/LootItem.class
 com/danny/treasurechests/TreasureChestInventoryHolder.class
 com/danny/treasurechests/LootTier.class
 com/danny/treasurechests/TreasureChestManager.class
-com/danny/treasurechests/TreasureChests.class
+com/danny/treasurechests/SoundInfo.class
 com/danny/treasurechests/ChestSpawner.class
 com/danny/treasurechests/LootManager.class
+com/danny/treasurechests/BlockBreakListener.class
+com/danny/treasurechests/TreasureChests.class
 com/danny/treasurechests/ChestOpenListener.class
 com/danny/treasurechests/LootManager$LootResult.class

@@ -56,13 +56,21 @@ public class BlockBreakListener implements Listener {
                     message = message.replace("%player%", player.getName()).replace("%tier%", tierName);
                     org.bukkit.Bukkit.broadcastMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', message));
 
-                    // Play sound for the player who found it
+                    // Play sound based on tier settings
+                    SoundInfo soundInfo = lootResult.getTier().getSoundInfo();
+                    String soundName = soundInfo.getName();
                     try {
-                        String soundName = plugin.getConfig().getString("sound", "ENTITY_PLAYER_LEVELUP");
-                        org.bukkit.Sound sound = org.bukkit.Sound.valueOf(soundName.toUpperCase());
-                        player.playSound(player.getLocation(), sound, 1.0f, 1.0f);
-                    } catch (IllegalArgumentException e) {
-                        plugin.getLogger().warning("Invalid sound name in config.yml: " + plugin.getConfig().getString("sound"));
+                        if (soundInfo.shouldBroadcast()) {
+                            // Play for everyone
+                            for (org.bukkit.entity.Player onlinePlayer : org.bukkit.Bukkit.getOnlinePlayers()) {
+                                onlinePlayer.playSound(onlinePlayer.getLocation(), soundName, 1.0f, 1.0f);
+                            }
+                        } else {
+                            // Play for just the finder
+                            player.playSound(player.getLocation(), soundName, 1.0f, 1.0f);
+                        }
+                    } catch (Exception e) {
+                        plugin.getLogger().warning("An error occurred while trying to play sound '" + soundName + "'. Is it a valid sound name?");
                     }
                 });
             }

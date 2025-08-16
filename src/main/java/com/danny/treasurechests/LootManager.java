@@ -36,6 +36,11 @@ public class LootManager {
             double tierChance = tierSection.getDouble("chance");
             String displayName = tierSection.getString("display-name", tierName);
 
+            // Parse sound info
+            String soundName = tierSection.getString("sound.name", "ENTITY_PLAYER_LEVELUP");
+            boolean broadcastSound = tierSection.getBoolean("sound.broadcast", false);
+            SoundInfo soundInfo = new SoundInfo(soundName, broadcastSound);
+
             List<LootItem> items = new ArrayList<>();
             List<Map<?, ?>> itemMaps = tierSection.getMapList("items");
 
@@ -71,7 +76,7 @@ public class LootManager {
                 continue;
             }
 
-            LootTier lootTier = new LootTier(tierName, displayName, tierChance, items);
+            LootTier lootTier = new LootTier(tierName, displayName, tierChance, soundInfo, items);
             lootTiers.put(tierName, lootTier);
             totalTierChance += tierChance;
             plugin.getLogger().info("Loaded tier '" + tierName + "' with " + items.size() + " items.");

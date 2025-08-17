@@ -4,6 +4,8 @@ import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import org.bukkit.*;
 import org.bukkit.entity.Display;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Interaction;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -32,6 +34,9 @@ public class DisplayManager {
     public void spawnTreasure(Location location, LootManager.LootResult lootResult, Player player) {
         if (lootResult == null) return;
 
+        // Place barrier for collision
+        location.getBlock().setType(Material.BARRIER);
+
         // Create the head item stack
         ItemStack headStack = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta meta = (SkullMeta) headStack.getItemMeta();
@@ -46,21 +51,22 @@ public class DisplayManager {
         ItemDisplay itemDisplay = world.spawn(location.clone().add(0.5, 0, 0.5), ItemDisplay.class);
         itemDisplay.setItemStack(headStack);
 
-        // Set display size for interaction
-        itemDisplay.setDisplayWidth(0.8f);
-        itemDisplay.setDisplayHeight(0.8f);
-
         // Set transformation
         itemDisplay.setBillboard(Display.Billboard.FIXED);
         Transformation transformation = itemDisplay.getTransformation();
-        transformation.getTranslation().set(0, 0.4f, 0);
-        // Snap yaw to 90-degree increments
+        transformation.getTranslation().set(0, 0.8f, 0);
+        // Snap yaw to 90-degree increments and fix rotation
         float snappedYaw = Math.round(player.getYaw() / 90.0f) * 90.0f;
-        transformation.getLeftRotation().set(new Quaternionf().rotateY((float) Math.toRadians(180 - snappedYaw)));
+        transformation.getLeftRotation().set(new Quaternionf().rotateY((float) Math.toRadians(-snappedYaw)));
         itemDisplay.setTransformation(transformation);
 
+        // Spawn interaction entity
+        Interaction interaction = world.spawn(location.clone().add(0.5, 0.5, 0.5), Interaction.class);
+        interaction.setInteractionWidth(1f);
+        interaction.setInteractionHeight(1f);
+
         // Register it
-        treasureChestManager.addTreasureChest(location, new TreasureChestManager.TreasureChestData(lootResult.getTier(), lootResult.getItems()));
+        treasureChestManager.addTreasureChest(location, new TreasureChestManager.TreasureChestData(lootResult.getTier(), lootResult.getItems(), itemDisplay.getUniqueId(), interaction.getUniqueId()));
 
         // Run spawn animation
         runScaleAnimation(itemDisplay, lootResult.getTier().getSpawnAnimation(), true);
@@ -68,10 +74,10 @@ public class DisplayManager {
         plugin.getLogger().info("Erfolgreich einen Schatz an Position " + location.toVector() + " gespawnt");
 
         // Schedule despawn and debug tasks
-        scheduleDespawn(location, itemDisplay);
+        scheduleDespawn(location);
     }
 
-    private void scheduleDespawn(Location location, ItemDisplay itemDisplay) {
+    private void scheduleDespawn(Location location) {
         final long despawnTime = System.currentTimeMillis() + 60000; // 1 minute from now
 
         // Debug task
@@ -95,13 +101,13 @@ public class DisplayManager {
         BukkitTask despawnTask = new BukkitRunnable() {
             @Override
             public void run() {
-                despawnTreasure(location, itemDisplay);
+                despawnTreasure(location);
             }
         }.runTaskLater(plugin, 1200L); // 60 seconds
         despawnTasks.put(location, despawnTask);
     }
 
-    public void despawnTreasure(Location location, ItemDisplay itemDisplay) {
+    public void despawnTreasure(Location location) {
         // Cancel tasks
         if (debugTasks.containsKey(location)) {
             debugTasks.get(location).cancel();
@@ -113,20 +119,30 @@ public class DisplayManager {
 
         TreasureChestManager.TreasureChestData chestData = treasureChestManager.getChestDataAt(location);
         if (chestData == null) {
-            // Failsafe if data is not found
-            if (itemDisplay != null && itemDisplay.isValid()) itemDisplay.remove();
+            // Failsafe if data is not found, just clear the barrier
+            if (location.getBlock().getType() == Material.BARRIER) {
+                location.getBlock().setType(Material.AIR);
+            }
             return;
         }
 
-        // Run despawn animation
-        runScaleAnimation(itemDisplay, chestData.tier().getDespawnAnimation(), false);
+        Entity displayEntity = Bukkit.getEntity(chestData.displayId());
+        if (displayEntity instanceof ItemDisplay) {
+            runScaleAnimation((ItemDisplay) displayEntity, chestData.tier().getDespawnAnimation(), false);
+        }
         playSound(location, chestData.tier().getDespawnAnimation().getSound());
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (itemDisplay != null && itemDisplay.isValid()) {
-                    itemDisplay.remove();
+                Entity displayToRemove = Bukkit.getEntity(chestData.displayId());
+                if (displayToRemove != null) displayToRemove.remove();
+
+                Entity interactionToRemove = Bukkit.getEntity(chestData.interactionId());
+                if (interactionToRemove != null) interactionToRemove.remove();
+
+                if (location.getBlock().getType() == Material.BARRIER) {
+                    location.getBlock().setType(Material.AIR);
                 }
                 treasureChestManager.removeTreasureChest(location);
             }
@@ -136,7 +152,6 @@ public class DisplayManager {
 
     private void runScaleAnimation(ItemDisplay display, Animation.AnimationInfo animationInfo, boolean isSpawning) {
         if (animationInfo == null || animationInfo.getScale() == null) {
-            // If no animation, just set the final scale
             if (isSpawning) {
                 Transformation transformation = display.getTransformation();
                 transformation.getScale().set(0.65f);
@@ -157,7 +172,6 @@ public class DisplayManager {
             public void run() {
                 if (ticks > duration) {
                     this.cancel();
-                    // Ensure final scale is set correctly after animation
                     if(isSpawning) {
                         Transformation transformation = display.getTransformation();
                         transformation.getScale().set((float) to * baseSize);

@@ -8,6 +8,9 @@ drop-chance: 0.05
 # Use %player% for the player's name and %tier% for the chest tier.
 broadcast-message: "&6&lSCHATZFUND! &e%player% &7hat eine &e%tier% &7Schatztruhe gefunden!"
 
+# Whether to broadcast the message above when a chest is found.
+broadcast-message-toggle: true
+
 # A list of blocks that can drop a treasure chest when broken.
 allowed-blocks:
   - "STONE"

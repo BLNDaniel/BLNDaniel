@@ -57,11 +57,13 @@ public class BlockBreakListener implements Listener {
                     plugin.getDisplayManager().spawnTreasure(location, lootResult, player);
 
                     // Send feedback to the server
-                    String message = plugin.getConfig().getString("broadcast-message", "&e%player% found a %tier% treasure chest!");
-                    String tierName = lootResult.getTier().getDisplayName();
+                    if (plugin.getConfig().getBoolean("broadcast-message-toggle", true)) {
+                        String message = plugin.getConfig().getString("broadcast-message", "&e%player% found a %tier% treasure chest!");
+                        String tierName = lootResult.getTier().getDisplayName();
 
-                    message = message.replace("%player%", player.getName()).replace("%tier%", tierName);
-                    Bukkit.broadcastMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', message));
+                        message = message.replace("%player%", player.getName()).replace("%tier%", tierName);
+                        Bukkit.broadcastMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', message));
+                    }
 
                     // Play sound based on tier settings
                     SoundInfo soundInfo = lootResult.getTier().getSoundInfo();

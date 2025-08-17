@@ -58,10 +58,10 @@ public class DisplayManager {
         itemDisplay.setItemStack(headStack);
 
         // Set fixed transformation
+        itemDisplay.setBillboard(Display.Billboard.FIXED);
         Transformation transformation = itemDisplay.getTransformation();
         transformation.getTranslation().set(0, 0.5f, 0);
         itemDisplay.setTransformation(transformation);
-        // NO BILLBOARD - itemDisplay.setBillboard(Display.Billboard.CENTER);
 
         // Register it
         treasureChestManager.addTreasureChest(location, lootResult.getTier());

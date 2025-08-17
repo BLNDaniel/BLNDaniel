@@ -35,12 +35,12 @@ loot-tables:
           sound: { name: "BLOCK_CHEST_OPEN", volume: 0.5, pitch: 1.5 }
           particles:
             - { type: "CLOUD", count: 15, speed: 0.05 }
-          scale: { from: 0.1, to: 3.0, duration: 10 }
+          scale: { from: 0.1, to: 2.8, duration: 10 }
         despawn:
           sound: { name: "BLOCK_CHEST_CLOSE", volume: 0.5, pitch: 1.5 }
           particles:
             - { type: "SMOKE_NORMAL", count: 15, speed: 0.05 }
-          scale: { from: 3.0, to: 0.0, duration: 10 }
+          scale: { from: 2.8, to: 0.0, duration: 10 }
       items:
         - material: "IRON_INGOT"
           amount: "5-10"
@@ -63,12 +63,12 @@ loot-tables:
           sound: { name: "BLOCK_CHEST_OPEN", volume: 0.5, pitch: 1.5 }
           particles:
             - { type: "CLOUD", count: 15, speed: 0.05 }
-          scale: { from: 0.1, to: 3.0, duration: 10 }
+          scale: { from: 0.1, to: 2.8, duration: 10 }
         despawn:
           sound: { name: "BLOCK_CHEST_CLOSE", volume: 0.5, pitch: 1.5 }
           particles:
             - { type: "SMOKE_NORMAL", count: 15, speed: 0.05 }
-          scale: { from: 3.0, to: 0.0, duration: 10 }
+          scale: { from: 2.8, to: 0.0, duration: 10 }
       items:
         - material: "GOLDEN_APPLE"
           amount: 1
@@ -91,12 +91,12 @@ loot-tables:
           sound: { name: "BLOCK_CHEST_OPEN", volume: 0.5, pitch: 1.5 }
           particles:
             - { type: "CLOUD", count: 15, speed: 0.05 }
-          scale: { from: 0.1, to: 3.0, duration: 10 }
+          scale: { from: 0.1, to: 2.8, duration: 10 }
         despawn:
           sound: { name: "BLOCK_CHEST_CLOSE", volume: 0.5, pitch: 1.5 }
           particles:
             - { type: "SMOKE_NORMAL", count: 15, speed: 0.05 }
-          scale: { from: 3.0, to: 0.0, duration: 10 }
+          scale: { from: 2.8, to: 0.0, duration: 10 }
       items:
         - material: "DIAMOND_SWORD"
           amount: 1
@@ -119,12 +119,12 @@ loot-tables:
           sound: { name: "BLOCK_CHEST_OPEN", volume: 0.5, pitch: 1.5 }
           particles:
             - { type: "CLOUD", count: 15, speed: 0.05 }
-          scale: { from: 0.1, to: 3.0, duration: 10 }
+          scale: { from: 0.1, to: 2.8, duration: 10 }
         despawn:
           sound: { name: "BLOCK_CHEST_CLOSE", volume: 0.5, pitch: 1.5 }
           particles:
             - { type: "SMOKE_NORMAL", count: 15, speed: 0.05 }
-          scale: { from: 3.0, to: 0.0, duration: 10 }
+          scale: { from: 2.8, to: 0.0, duration: 10 }
       items:
         - material: "NETHERITE_INGOT"
           amount: "1-2"
@@ -147,12 +147,12 @@ loot-tables:
           sound: { name: "BLOCK_CHEST_OPEN", volume: 0.5, pitch: 1.5 }
           particles:
             - { type: "CLOUD", count: 15, speed: 0.05 }
-          scale: { from: 0.1, to: 3.0, duration: 10 }
+          scale: { from: 0.1, to: 2.8, duration: 10 }
         despawn:
           sound: { name: "BLOCK_CHEST_CLOSE", volume: 0.5, pitch: 1.5 }
           particles:
             - { type: "SMOKE_NORMAL", count: 15, speed: 0.05 }
-          scale: { from: 3.0, to: 0.0, duration: 10 }
+          scale: { from: 2.8, to: 0.0, duration: 10 }
       items:
         - material: "NETHER_STAR"
           amount: 1

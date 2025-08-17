@@ -6,6 +6,7 @@ com/danny/treasurechests/TreasureChestManager.class
 com/danny/treasurechests/Animation$SoundEffect.class
 com/danny/treasurechests/LootManager.class
 com/danny/treasurechests/DisplayInteractListener.class
+com/danny/treasurechests/BlockPlaceListener.class
 com/danny/treasurechests/DisplayManager$2.class
 com/danny/treasurechests/BlockBreakListener.class
 com/danny/treasurechests/Animation.class

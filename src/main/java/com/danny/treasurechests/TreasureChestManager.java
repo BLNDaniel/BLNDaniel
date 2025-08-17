@@ -5,7 +5,9 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public class TreasureChestManager {
@@ -14,6 +16,7 @@ public class TreasureChestManager {
 
     private final Map<Location, TreasureChestData> treasureChests = new HashMap<>();
     private final Map<UUID, Location> interactionIdToLocation = new HashMap<>();
+    private final Set<Location> playerPlacedBlocks = new HashSet<>();
 
     public void addTreasureChest(Location location, TreasureChestData data) {
         treasureChests.put(location, data);
@@ -41,5 +44,17 @@ public class TreasureChestManager {
 
     public boolean isTreasureChestInteraction(UUID interactionId) {
         return interactionIdToLocation.containsKey(interactionId);
+    }
+
+    public void addPlayerPlacedBlock(Location location) {
+        playerPlacedBlocks.add(location);
+    }
+
+    public void removePlayerPlacedBlock(Location location) {
+        playerPlacedBlocks.remove(location);
+    }
+
+    public boolean isPlayerPlacedBlock(Location location) {
+        return playerPlacedBlocks.contains(location);
     }
 }

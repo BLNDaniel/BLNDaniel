@@ -34,8 +34,8 @@ public class DisplayManager {
     public void spawnTreasure(Location location, LootManager.LootResult lootResult, Player player) {
         if (lootResult == null) return;
 
-        // Place glass for collision debugging
-        location.getBlock().setType(Material.GLASS);
+        // Place barrier for collision
+        location.getBlock().setType(Material.BARRIER);
 
         // Create the head item stack
         ItemStack headStack = new ItemStack(Material.PLAYER_HEAD);
@@ -54,7 +54,7 @@ public class DisplayManager {
         // Set transformation
         itemDisplay.setBillboard(Display.Billboard.FIXED);
         Transformation transformation = itemDisplay.getTransformation();
-        transformation.getTranslation().set(0, 0.9f, 0);
+        transformation.getTranslation().set(0, 1.0f, 0);
         // Snap yaw to 90-degree increments and fix rotation
         float snappedYaw = Math.round(player.getYaw() / 90.0f) * 90.0f;
         transformation.getLeftRotation().set(new Quaternionf().rotateY((float) Math.toRadians(-snappedYaw)));
@@ -63,7 +63,7 @@ public class DisplayManager {
         // Spawn interaction entity, centered in the block
         Interaction interaction = world.spawn(location.clone().add(0.5, 0.5, 0.5), Interaction.class);
         interaction.setInteractionWidth(1f);
-        interaction.setInteractionHeight(1f);
+        interaction.setInteractionHeight(0.8f);
 
         // Register it
         treasureChestManager.addTreasureChest(location, new TreasureChestManager.TreasureChestData(lootResult.getTier(), lootResult.getItems(), itemDisplay.getUniqueId(), interaction.getUniqueId()));
@@ -119,8 +119,8 @@ public class DisplayManager {
 
         TreasureChestManager.TreasureChestData chestData = treasureChestManager.getChestDataAt(location);
         if (chestData == null) {
-            // Failsafe if data is not found, just clear the glass
-            if (location.getBlock().getType() == Material.GLASS) {
+            // Failsafe if data is not found, just clear the barrier
+            if (location.getBlock().getType() == Material.BARRIER) {
                 location.getBlock().setType(Material.AIR);
             }
             return;
@@ -141,7 +141,7 @@ public class DisplayManager {
                 Entity interactionToRemove = Bukkit.getEntity(chestData.interactionId());
                 if (interactionToRemove != null) interactionToRemove.remove();
 
-                if (location.getBlock().getType() == Material.GLASS) {
+                if (location.getBlock().getType() == Material.BARRIER) {
                     location.getBlock().setType(Material.AIR);
                 }
                 treasureChestManager.removeTreasureChest(location);

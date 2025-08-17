@@ -1,6 +1,7 @@
 package com.danny.treasurechests;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -9,16 +10,24 @@ public class BlockBreakListener implements Listener {
 
     private final TreasureChests plugin;
     private final LootManager lootManager;
+    private final TreasureChestManager treasureChestManager;
 
-    public BlockBreakListener(TreasureChests plugin, LootManager lootManager) {
+    public BlockBreakListener(TreasureChests plugin, LootManager lootManager, TreasureChestManager treasureChestManager) {
         this.plugin = plugin;
         this.lootManager = lootManager;
+        this.treasureChestManager = treasureChestManager;
     }
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         final org.bukkit.entity.Player player = event.getPlayer();
-        final org.bukkit.Location location = event.getBlock().getLocation();
+        final Location location = event.getBlock().getLocation();
+
+        // Check if the block was placed by a player
+        if (treasureChestManager.isPlayerPlacedBlock(location)) {
+            treasureChestManager.removePlayerPlacedBlock(location); // Clean up the entry
+            return;
+        }
 
         // Check if the block is in the allowed list
         java.util.List<String> allowedBlocks = plugin.getConfig().getStringList("allowed-blocks");

@@ -33,9 +33,6 @@ public class DisplayManager {
     public void spawnTreasure(Location location, LootManager.LootResult lootResult, Player player) {
         if (lootResult == null) return;
 
-        // Place barrier for collision
-        location.getBlock().setType(Material.BARRIER);
-
         // Create the head item stack
         ItemStack headStack = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta meta = (SkullMeta) headStack.getItemMeta();

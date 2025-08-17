@@ -54,14 +54,14 @@ public class DisplayManager {
         // Set transformation
         itemDisplay.setBillboard(Display.Billboard.FIXED);
         Transformation transformation = itemDisplay.getTransformation();
-        transformation.getTranslation().set(0, 0.8f, 0);
+        transformation.getTranslation().set(0, 0.9f, 0);
         // Snap yaw to 90-degree increments and fix rotation
         float snappedYaw = Math.round(player.getYaw() / 90.0f) * 90.0f;
         transformation.getLeftRotation().set(new Quaternionf().rotateY((float) Math.toRadians(-snappedYaw)));
         itemDisplay.setTransformation(transformation);
 
         // Spawn interaction entity
-        Interaction interaction = world.spawn(location.clone().add(0.5, 0.5, 0.5), Interaction.class);
+        Interaction interaction = world.spawn(location.clone().add(0.5, 0.9, 0.5), Interaction.class);
         interaction.setInteractionWidth(1f);
         interaction.setInteractionHeight(1f);
 
@@ -154,7 +154,7 @@ public class DisplayManager {
         if (animationInfo == null || animationInfo.getScale() == null) {
             if (isSpawning) {
                 Transformation transformation = display.getTransformation();
-                transformation.getScale().set(0.65f);
+                transformation.getScale().set(0.70f);
                 display.setTransformation(transformation);
             }
             return;
@@ -164,7 +164,7 @@ public class DisplayManager {
         final double from = scaleEffect.getFrom();
         final double to = scaleEffect.getTo();
         final int duration = scaleEffect.getDuration();
-        final float baseSize = 0.65f;
+        final float baseSize = 0.70f;
 
         new BukkitRunnable() {
             private int ticks = 0;

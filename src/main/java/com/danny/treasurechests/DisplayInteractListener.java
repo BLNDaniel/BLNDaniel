@@ -10,6 +10,9 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.Inventory;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 public class DisplayInteractListener implements Listener {
@@ -43,7 +46,18 @@ public class DisplayInteractListener implements Listener {
 
         // Create a virtual barrel inventory
         Inventory barrelInventory = Bukkit.createInventory(null, InventoryType.BARREL, chestData.tier().getDisplayName());
-        barrelInventory.setContents(chestData.items().toArray(new org.bukkit.inventory.ItemStack[0]));
+
+        // Place items in random slots
+        List<Integer> slots = new ArrayList<>();
+        for (int i = 0; i < barrelInventory.getSize(); i++) {
+            slots.add(i);
+        }
+        Collections.shuffle(slots);
+
+        for (int i = 0; i < chestData.items().size(); i++) {
+            if (i >= slots.size()) break; // Should not happen if loot size <= inventory size
+            barrelInventory.setItem(slots.get(i), chestData.items().get(i));
+        }
 
         player.openInventory(barrelInventory);
     }

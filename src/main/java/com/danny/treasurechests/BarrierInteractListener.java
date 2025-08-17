@@ -2,42 +2,43 @@ package com.danny.treasurechests;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Interaction;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
-public class DisplayInteractListener implements Listener {
+public class BarrierInteractListener implements Listener {
 
     private final TreasureChestManager treasureChestManager;
 
-    public DisplayInteractListener(TreasureChestManager treasureChestManager) {
+    public BarrierInteractListener(TreasureChestManager treasureChestManager) {
         this.treasureChestManager = treasureChestManager;
     }
 
     @EventHandler
-    public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-        if (!(event.getRightClicked() instanceof Interaction)) {
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock() == null) {
             return;
         }
 
-        UUID interactionId = event.getRightClicked().getUniqueId();
-        if (!treasureChestManager.isTreasureChestInteraction(interactionId)) {
+        if (event.getClickedBlock().getType() != Material.BARRIER) {
+            return;
+        }
+
+        Location location = event.getClickedBlock().getLocation();
+        if (!treasureChestManager.isTreasureChest(location)) {
             return;
         }
 
         event.setCancelled(true);
-
-        Location location = treasureChestManager.getLocationFromInteractionId(interactionId);
-        if (location == null) return;
 
         TreasureChestManager.TreasureChestData chestData = treasureChestManager.getChestDataAt(location);
         if (chestData == null) return;
@@ -55,7 +56,7 @@ public class DisplayInteractListener implements Listener {
         Collections.shuffle(slots);
 
         for (int i = 0; i < chestData.items().size(); i++) {
-            if (i >= slots.size()) break; // Should not happen if loot size <= inventory size
+            if (i >= slots.size()) break;
             barrelInventory.setItem(slots.get(i), chestData.items().get(i));
         }
 

@@ -5,7 +5,6 @@ import com.destroystokyo.paper.profile.ProfileProperty;
 import org.bukkit.*;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Interaction;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -60,13 +59,8 @@ public class DisplayManager {
         transformation.getLeftRotation().set(new Quaternionf().rotateY((float) Math.toRadians(-snappedYaw)));
         itemDisplay.setTransformation(transformation);
 
-        // Spawn interaction entity, centered in the block
-        Interaction interaction = world.spawn(location.clone().add(0.5, 0.0, 0.5), Interaction.class);
-        interaction.setInteractionWidth(1f);
-        interaction.setInteractionHeight(0.8f);
-
         // Register it
-        treasureChestManager.addTreasureChest(location, new TreasureChestManager.TreasureChestData(lootResult.getTier(), lootResult.getItems(), itemDisplay.getUniqueId(), interaction.getUniqueId()));
+        treasureChestManager.addTreasureChest(location, new TreasureChestManager.TreasureChestData(lootResult.getTier(), lootResult.getItems(), itemDisplay.getUniqueId()));
 
         // Run spawn animation
         runScaleAnimation(itemDisplay, lootResult.getTier().getSpawnAnimation(), true);
@@ -137,9 +131,6 @@ public class DisplayManager {
             public void run() {
                 Entity displayToRemove = Bukkit.getEntity(chestData.displayId());
                 if (displayToRemove != null) displayToRemove.remove();
-
-                Entity interactionToRemove = Bukkit.getEntity(chestData.interactionId());
-                if (interactionToRemove != null) interactionToRemove.remove();
 
                 if (location.getBlock().getType() == Material.BARRIER) {
                     location.getBlock().setType(Material.AIR);

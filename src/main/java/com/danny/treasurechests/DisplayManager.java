@@ -54,9 +54,14 @@ public class DisplayManager {
         // Spawn the Item Display
         World world = location.getWorld();
         if (world == null) return;
-        ItemDisplay itemDisplay = world.spawn(location.clone().add(0.5, 0.25, 0.5), ItemDisplay.class);
+        ItemDisplay itemDisplay = world.spawn(location.clone().add(0.5, 0, 0.5), ItemDisplay.class);
         itemDisplay.setItemStack(headStack);
-        itemDisplay.setBillboard(Display.Billboard.CENTER);
+
+        // Set fixed transformation
+        Transformation transformation = itemDisplay.getTransformation();
+        transformation.getTranslation().set(0, 0.5f, 0);
+        itemDisplay.setTransformation(transformation);
+        // NO BILLBOARD - itemDisplay.setBillboard(Display.Billboard.CENTER);
 
         // Register it
         treasureChestManager.addTreasureChest(location, lootResult.getTier());

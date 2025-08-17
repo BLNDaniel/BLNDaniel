@@ -13,12 +13,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class LootManager {
 
     private final TreasureChests plugin;
     private final Map<String, LootTier> lootTiers = new HashMap<>();
     private double totalTierChance = 0.0;
+    private final Random random = new Random();
 
     public LootManager(TreasureChests plugin) {
         this.plugin = plugin;
@@ -164,21 +166,33 @@ public class LootManager {
             }
         }
 
+        if (items.isEmpty()) {
+            return null; // If after all rolls no items were selected, return null
+        }
+
         return new LootResult(chosenTier, items);
     }
 
     private LootTier chooseRandomTier() {
-        if (lootTiers.isEmpty()) return null;
+        if (lootTiers.isEmpty()) {
+            return null;
+        }
 
-        double randomValue = new java.util.Random().nextDouble() * totalTierChance;
+        double randomValue = random.nextDouble() * totalTierChance;
         double cumulativeWeight = 0.0;
-        for (LootTier tier : lootTiers.values()) {
+
+        // Using an ordered list to have a guaranteed last element for the failsafe
+        List<LootTier> tiers = new ArrayList<>(lootTiers.values());
+
+        for (LootTier tier : tiers) {
             cumulativeWeight += tier.getChance();
             if (randomValue < cumulativeWeight) {
                 return tier;
             }
         }
-        return null;
+
+        // Failsafe for floating point inaccuracies or if chances don't sum up correctly.
+        return tiers.get(tiers.size() - 1);
     }
 
     private LootItem chooseRandomItem(LootTier tier) {
@@ -186,16 +200,17 @@ public class LootManager {
             return null;
         }
 
-        LootItem selected = null;
-        while(selected == null) {
-            for(LootItem item : tier.getItems()) {
-                if(new java.util.Random().nextDouble() < item.getChance()) {
-                    selected = item;
-                    break;
-                }
+        // Shuffle items to avoid bias towards items listed first in the config
+        List<LootItem> shuffledItems = new ArrayList<>(tier.getItems());
+        Collections.shuffle(shuffledItems, random);
+
+        for (LootItem item : shuffledItems) {
+            if (random.nextDouble() < item.getChance()) {
+                return item; // Return the first item that passes its chance roll
             }
         }
-        return selected;
+
+        return null; // If no item passes its chance roll, return null for this roll.
     }
 
     private ItemStack createItemStack(LootItem item) {
@@ -208,7 +223,7 @@ public class LootManager {
                 String[] parts = amountString.split("-");
                 int min = Integer.parseInt(parts[0]);
                 int max = Integer.parseInt(parts[1]);
-                return new java.util.Random().nextInt((max - min) + 1) + min;
+                return random.nextInt((max - min) + 1) + min;
             } catch (NumberFormatException e) {
                 return 1;
             }

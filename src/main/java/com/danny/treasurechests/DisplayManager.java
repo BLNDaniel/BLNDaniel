@@ -2,46 +2,35 @@ package com.danny.treasurechests;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.World;
-import org.bukkit.block.Barrel;
+import org.bukkit.*;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.ItemDisplay;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Transformation;
-import org.joml.Vector3f;
+import org.joml.Quaternionf;
 
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class DisplayManager {
 
     private final TreasureChests plugin;
     private final TreasureChestManager treasureChestManager;
+    private final Map<Location, BukkitTask> despawnTasks = new HashMap<>();
+    private final Map<Location, BukkitTask> debugTasks = new HashMap<>();
 
     public DisplayManager(TreasureChests plugin, TreasureChestManager treasureChestManager) {
         this.plugin = plugin;
         this.treasureChestManager = treasureChestManager;
     }
 
-    public void spawnTreasure(Location location, LootManager.LootResult lootResult) {
+    public void spawnTreasure(Location location, LootManager.LootResult lootResult, Player player) {
         if (lootResult == null) return;
-
-        // Place the barrel
-        location.getBlock().setType(Material.BARREL);
-        Barrel barrel = (Barrel) location.getBlock().getState();
-        java.util.List<Integer> slots = new java.util.ArrayList<>();
-        for (int i = 0; i < barrel.getInventory().getSize(); i++) slots.add(i);
-        Collections.shuffle(slots);
-        for (int i = 0; i < lootResult.getItems().size(); i++) {
-            if (i >= slots.size()) break;
-            barrel.getInventory().setItem(slots.get(i), lootResult.getItems().get(i));
-        }
 
         // Create the head item stack
         ItemStack headStack = new ItemStack(Material.PLAYER_HEAD);
@@ -57,51 +46,104 @@ public class DisplayManager {
         ItemDisplay itemDisplay = world.spawn(location.clone().add(0.5, 0, 0.5), ItemDisplay.class);
         itemDisplay.setItemStack(headStack);
 
-        // Set fixed transformation
+        // Set transformation
         itemDisplay.setBillboard(Display.Billboard.FIXED);
         Transformation transformation = itemDisplay.getTransformation();
-        transformation.getTranslation().set(0, 0.5f, 0);
+        transformation.getTranslation().set(0, 0.375f, 0);
+        transformation.getLeftRotation().set(new Quaternionf().rotateY((float) Math.toRadians(180 - player.getYaw())));
         itemDisplay.setTransformation(transformation);
 
         // Register it
-        treasureChestManager.addTreasureChest(location, lootResult.getTier());
+        treasureChestManager.addTreasureChest(location, new TreasureChestManager.TreasureChestData(lootResult.getTier(), lootResult.getItems()));
 
         // Run spawn animation
-        runScaleAnimation(itemDisplay, lootResult.getTier().getSpawnAnimation());
+        runScaleAnimation(itemDisplay, lootResult.getTier().getSpawnAnimation(), true);
         playSound(location, lootResult.getTier().getSpawnAnimation().getSound());
         plugin.getLogger().info("Erfolgreich einen Schatz an Position " + location.toVector() + " gespawnt");
+
+        // Schedule despawn and debug tasks
+        scheduleDespawn(location, itemDisplay);
+    }
+
+    private void scheduleDespawn(Location location, ItemDisplay itemDisplay) {
+        final long despawnTime = System.currentTimeMillis() + 60000; // 1 minute from now
+
+        // Debug task
+        BukkitTask debugTask = new BukkitRunnable() {
+            @Override
+            public void run() {
+                long remaining = (despawnTime - System.currentTimeMillis()) / 1000;
+                if (remaining <= 0) {
+                    this.cancel();
+                    return;
+                }
+                String message = ChatColor.GOLD + "[TreasureDebug] " + ChatColor.YELLOW + "Kiste bei " +
+                        location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ() +
+                        " despawned in " + remaining + " Sekunden.";
+                Bukkit.getOnlinePlayers().stream().filter(p -> p.isOp() && p.hasPermission("treasurechests.debug")).forEach(op -> op.sendMessage(message));
+            }
+        }.runTaskTimer(plugin, 0L, 40L); // Every 2 seconds
+        debugTasks.put(location, debugTask);
+
+        // Despawn task
+        BukkitTask despawnTask = new BukkitRunnable() {
+            @Override
+            public void run() {
+                despawnTreasure(location, itemDisplay);
+            }
+        }.runTaskLater(plugin, 1200L); // 60 seconds
+        despawnTasks.put(location, despawnTask);
     }
 
     public void despawnTreasure(Location location, ItemDisplay itemDisplay) {
-        LootTier tier = treasureChestManager.getTierAt(location);
-        if (tier == null) {
-            // Failsafe if tier is not found
-            itemDisplay.remove();
-            location.getBlock().setType(Material.AIR);
+        // Cancel tasks
+        if (debugTasks.containsKey(location)) {
+            debugTasks.get(location).cancel();
+            debugTasks.remove(location);
+        }
+        if (despawnTasks.containsKey(location)) {
+            despawnTasks.remove(location); // No need to cancel, it just ran
+        }
+
+        TreasureChestManager.TreasureChestData chestData = treasureChestManager.getChestDataAt(location);
+        if (chestData == null) {
+            // Failsafe if data is not found
+            if (itemDisplay != null && itemDisplay.isValid()) itemDisplay.remove();
             return;
         }
 
         // Run despawn animation
-        runScaleAnimation(itemDisplay, tier.getDespawnAnimation());
-        playSound(location, tier.getDespawnAnimation().getSound());
+        runScaleAnimation(itemDisplay, chestData.tier().getDespawnAnimation(), false);
+        playSound(location, chestData.tier().getDespawnAnimation().getSound());
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                itemDisplay.remove();
-                location.getBlock().setType(Material.AIR);
+                if (itemDisplay != null && itemDisplay.isValid()) {
+                    itemDisplay.remove();
+                }
                 treasureChestManager.removeTreasureChest(location);
             }
-        }.runTaskLater(plugin, tier.getDespawnAnimation().getScale().getDuration() + 5); // Delay removal
+        }.runTaskLater(plugin, chestData.tier().getDespawnAnimation().getScale().getDuration() + 5); // Delay removal
     }
 
-    private void runScaleAnimation(ItemDisplay display, Animation.AnimationInfo animationInfo) {
-        if (animationInfo == null || animationInfo.getScale() == null) return;
+
+    private void runScaleAnimation(ItemDisplay display, Animation.AnimationInfo animationInfo, boolean isSpawning) {
+        if (animationInfo == null || animationInfo.getScale() == null) {
+            // If no animation, just set the final scale
+            if (isSpawning) {
+                Transformation transformation = display.getTransformation();
+                transformation.getScale().set(0.75f);
+                display.setTransformation(transformation);
+            }
+            return;
+        }
 
         Animation.ScaleEffect scaleEffect = animationInfo.getScale();
         final double from = scaleEffect.getFrom();
         final double to = scaleEffect.getTo();
         final int duration = scaleEffect.getDuration();
+        final float baseSize = 0.75f;
 
         new BukkitRunnable() {
             private int ticks = 0;
@@ -109,6 +151,12 @@ public class DisplayManager {
             public void run() {
                 if (ticks > duration) {
                     this.cancel();
+                    // Ensure final scale is set correctly after animation
+                    if(isSpawning) {
+                        Transformation transformation = display.getTransformation();
+                        transformation.getScale().set((float) to * baseSize);
+                        display.setTransformation(transformation);
+                    }
                     return;
                 }
 
@@ -116,7 +164,7 @@ public class DisplayManager {
                 float currentScale = (float) (from + (to - from) * progress);
 
                 Transformation transformation = display.getTransformation();
-                transformation.getScale().set(currentScale);
+                transformation.getScale().set(currentScale * baseSize);
                 display.setTransformation(transformation);
 
                 ticks++;

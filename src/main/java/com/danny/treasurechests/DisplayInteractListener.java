@@ -1,12 +1,14 @@
 package com.danny.treasurechests;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.block.Barrel;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.inventory.Inventory;
 
 public class DisplayInteractListener implements Listener {
 
@@ -23,17 +25,19 @@ public class DisplayInteractListener implements Listener {
         }
 
         ItemDisplay itemDisplay = (ItemDisplay) event.getRightClicked();
-        // The display is spawned at block center, so we get the block location
         Location displayLocation = itemDisplay.getLocation().toBlockLocation();
 
-        if (treasureChestManager.isTreasureChest(displayLocation)) {
+        TreasureChestManager.TreasureChestData chestData = treasureChestManager.getChestDataAt(displayLocation);
+
+        if (chestData != null) {
             event.setCancelled(true);
             Player player = event.getPlayer();
 
-            if(displayLocation.getBlock().getState() instanceof Barrel) {
-                Barrel barrel = (Barrel) displayLocation.getBlock().getState();
-                player.openInventory(barrel.getInventory());
-            }
+            // Create a virtual barrel inventory
+            Inventory barrelInventory = Bukkit.createInventory(null, InventoryType.BARREL, chestData.tier().getDisplayName());
+            barrelInventory.setContents(chestData.items().toArray(new org.bukkit.inventory.ItemStack[0]));
+
+            player.openInventory(barrelInventory);
         }
     }
 }

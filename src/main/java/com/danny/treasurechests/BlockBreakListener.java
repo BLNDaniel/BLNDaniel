@@ -43,7 +43,7 @@ public class BlockBreakListener implements Listener {
             if (lootResult != null && !lootResult.getItems().isEmpty()) {
                 Bukkit.getScheduler().runTask(plugin, () -> {
                     // Spawn the treasure chest and custom model
-                    plugin.getDisplayManager().spawnTreasure(location, lootResult);
+                    plugin.getDisplayManager().spawnTreasure(location, lootResult, player);
 
                     // Send feedback to the server
                     String message = plugin.getConfig().getString("broadcast-message", "&e%player% found a %tier% treasure chest!");

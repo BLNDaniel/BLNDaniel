@@ -1,25 +1,27 @@
 package com.danny.treasurechests;
 
 import org.bukkit.Location;
-
-import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TreasureChestManager {
 
-    private final Map<Location, LootTier> treasureChests = new HashMap<>();
+    public record TreasureChestData(LootTier tier, List<ItemStack> items) {}
 
-    public void addTreasureChest(Location location, LootTier tier) {
-        treasureChests.put(location, tier);
+    private final Map<Location, TreasureChestData> treasureChests = new HashMap<>();
+
+    public void addTreasureChest(Location location, TreasureChestData data) {
+        treasureChests.put(location, data);
     }
 
     public void removeTreasureChest(Location location) {
         treasureChests.remove(location);
     }
 
-    public LootTier getTierAt(Location location) {
+    public TreasureChestData getChestDataAt(Location location) {
         return treasureChests.get(location);
     }
 

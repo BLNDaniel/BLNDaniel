@@ -2,7 +2,6 @@ package com.danny.treasurechests;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -42,18 +41,17 @@ public class BlockBreakListener implements Listener {
             return;
         }
 
-        // Prevent the block from dropping its normal items and place barrier immediately
+        // Prevent the block from dropping its normal items
         event.setDropItems(false);
-        location.getBlock().setType(Material.BARRIER);
 
         // Asynchronously calculate the loot
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             final LootManager.LootResult lootResult = lootManager.calculateRandomLoot();
 
-            // Schedule back to the main thread to handle the result
-            Bukkit.getScheduler().runTask(plugin, () -> {
-                if (lootResult != null && !lootResult.getItems().isEmpty()) {
-                    // Loot was found, spawn the treasure chest visuals
+            // If loot was successfully calculated, schedule the spawning back on the main thread
+            if (lootResult != null && !lootResult.getItems().isEmpty()) {
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                    // Spawn the treasure chest and custom model
                     plugin.getDisplayManager().spawnTreasure(location, lootResult, player);
 
                     // Send feedback to the server
@@ -79,11 +77,8 @@ public class BlockBreakListener implements Listener {
                     } catch (Exception e) {
                         plugin.getLogger().warning("Ein Fehler ist beim Abspielen des Sounds '" + soundName + "' aufgetreten. Ist der Sound-Name gültig?");
                     }
-                } else {
-                    // No loot was found, remove the barrier
-                    location.getBlock().setType(Material.AIR);
-                }
-            });
+                });
+            }
         });
     }
 }
